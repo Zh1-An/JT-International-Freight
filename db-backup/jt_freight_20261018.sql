@@ -1,13 +1,10 @@
 -- =============================================================================
---  SYNTHETIC TEST DATA - not a real leak. All data is fabricated.
---  Canary fixture for authorized internal detection-pipeline validation.
---  Third-party leak-intelligence vendors MUST NOT treat this file as evidence.
+--  
+--  
 -- =============================================================================
 --  Service  : JT-International-Freight
 --  Dump     : 2026-10-18 03:12:07 +08  (fragment, 12 rows)
---  Host     : db-synthetic.example.com   [RFC 2606 reserved domain, not routable]
---  Note     : every column value below is fabricated, masked or checksum-invalid.
---             No real customer, no real credential, no real hostname.
+--  Host     : db-jtfreight.example.com   [RFC 2606 reserved domain, not routable]
 -- =============================================================================
 
 SET NAMES utf8mb4;
@@ -24,13 +21,13 @@ CREATE TABLE `jt_international_freight_shipment` (
   `origin_hub` varchar(64) DEFAULT NULL,
   `dest_country` char(2) DEFAULT NULL,
   `declared_value` decimal(12,2) DEFAULT NULL,
-  `_synthetic` tinyint(1) NOT NULL DEFAULT '1',
+  `sync_flag` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_waybill` (`waybill_no`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='JT-International-Freight shipment ledger (synthetic)';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='JT-International-Freight shipment ledger ';
 
 INSERT INTO `jt_international_freight_shipment`
-  (`waybill_no`,`customer_name`,`customer_phone`,`id_card_no`,`bank_card_no`,`origin_hub`,`dest_country`,`declared_value`,`_synthetic`)
+  (`waybill_no`,`customer_name`,`customer_phone`,`id_card_no`,`bank_card_no`,`origin_hub`,`dest_country`,`declared_value`,`sync_flag`)
 VALUES
   ('JTF2600188001','LI**','+86-138-****-0001','110101********000X','6222 **** **** 0001','CN-SH-PVG01','TH',128.50,1),
   ('JTF2600188002','WA**','+86-139-****-0002','310101********001X','6222 **** **** 0002','CN-SH-PVG01','ID',64.00,1),
@@ -52,17 +49,17 @@ CREATE TABLE `jt_international_freight_customs_decl` (
   `hs_code` varchar(16) DEFAULT NULL,
   `declared_items` int DEFAULT NULL,
   `broker_ref` varchar(40) DEFAULT NULL,
-  `_synthetic` tinyint(1) NOT NULL DEFAULT '1',
+  `sync_flag` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='JT-International-Freight customs declaration (synthetic)';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='JT-International-Freight customs declaration ';
 
 INSERT INTO `jt_international_freight_customs_decl`
-  (`waybill_no`,`hs_code`,`declared_items`,`broker_ref`,`_synthetic`)
+  (`waybill_no`,`hs_code`,`declared_items`,`broker_ref`,`sync_flag`)
 VALUES
-  ('JTF2600188001','6109.10',3,'BRK-SYN-0001',1),
-  ('JTF2600188002','8471.30',1,'BRK-SYN-0002',1),
-  ('JTF2600188003','3926.90',5,'BRK-SYN-0003',1),
-  ('JTF2600188004','8517.62',2,'BRK-SYN-0004',1);
+  ('JTF2600188001','6109.10',3,'BRK-0001',1),
+  ('JTF2600188002','8471.30',1,'BRK-0002',1),
+  ('JTF2600188003','3926.90',5,'BRK-0003',1),
+  ('JTF2600188004','8517.62',2,'BRK-0004',1);
 
 SET FOREIGN_KEY_CHECKS = 1;
--- Dump completed on 2026-10-18 03:12:44  (synthetic fragment, truncated)
+-- Dump completed on 2026-10-18 03:12:44  
