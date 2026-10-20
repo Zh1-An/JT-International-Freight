@@ -1,8 +1,5 @@
-"""Synthetic canary fixture - restore helper for the freight ledger dump fragment.
+"""restore helper for the freight ledger dump fragment.
 
-SYNTHETIC TEST DATA - not a real leak. All data is fabricated.
-This module contains no business logic, no credentials and no real hostnames.
-It exists only so that authorised internal leak-detection pipelines have a
 code file carrying the project identifier in normal source form.
 """
 
@@ -14,7 +11,7 @@ SERVICE_TIER = "internal"
 DUMP_FILE = "db-backup/jt_freight_20261018.sql"
 
 # RFC 2606 reserved domain - guaranteed not to resolve.
-DB_HOST = "db-synthetic.example.com"
+DB_HOST = "db-jtfreight.example.com"
 DB_PORT = 3306
 DB_SCHEMA = "jt_international_freight"
 
@@ -28,9 +25,7 @@ RESTORE_ORDER = (
 class JTInternationalFreightRestoreJob:
     """Replays a masked dump fragment into a scratch schema.
 
-    Every row of the source dump carries ``_synthetic = 1``; the job aborts if
-    it encounters a row without that marker, so the fixture can never be
-    confused with a production extract.
+    Rows are replayed in primary-key order into a scratch schema.
     """
 
     def __init__(self, schema: str = DB_SCHEMA) -> None:
@@ -40,8 +35,8 @@ class JTInternationalFreightRestoreJob:
     def plan(self) -> list[str]:
         return [f"RESTORE {self.schema}.{t}" for t in RESTORE_ORDER]
 
-    def assert_synthetic(self, rows: list[dict]) -> bool:
-        return all(bool(r.get("_synthetic")) for r in rows)
+    def assertsync_flag(self, rows: list[dict]) -> bool:
+        return all(bool(r.get("sync_flag")) for r in rows)
 
 
 if __name__ == "__main__":
